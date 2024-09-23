@@ -12,5 +12,15 @@
     "dotenv": "^16.4.5",
     "sequelize-cli": "^6.6.2",
     "supertest": "^7.0.0"
-  }
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --watch server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

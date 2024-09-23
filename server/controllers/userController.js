@@ -16,6 +16,7 @@ module.exports = class UserController {
         email: newUser.email,
       });
     } catch (error) {
+      console.log(error);
       if (
         error.name === "SequelizeValidationError" ||
         error.name === "SequelizeUniqueConstraintError"
