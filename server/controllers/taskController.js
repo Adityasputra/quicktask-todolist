@@ -28,16 +28,16 @@ module.exports = class TaskController {
     }
   }
 
-  static async getAllTask(req, res) {
-    try {
-      const tasks = await Task.findAll();
-      res.status(200).json(tasks);
-    } catch (error) {
-      res.status(500).json({
-        message: "Internal Server Error",
-      });
-    }
-  }
+  // static async getAllTask(req, res) {
+  //   try {
+  //     const tasks = await Task.findAll();
+  //     res.status(200).json(tasks);
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       message: "Internal Server Error",
+  //     });
+  //   }
+  // }
 
   static async updateTask(req, res) {
     try {
@@ -68,6 +68,23 @@ module.exports = class TaskController {
       }
     } catch (error) {
       console.log(error);
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  }
+
+  static async getAllUserTask(req, res) {
+    try {
+      const { id } = req.user;
+      const tasks = await Task.findAll({ where: { UserId: id } });
+      if (!tasks) {
+        return res.status(404).json({
+          message: "Task User is Not Found",
+        });
+      }
+      res.status(200).json(tasks);
+    } catch (error) {
       res.status(500).json({
         message: "Internal Server Error",
       });
