@@ -4,12 +4,12 @@ module.exports = class TaskController {
   static async createTask(req, res) {
     try {
       const { title, description } = req.body;
-      const { id } = req.user;
+      const { userId } = req.user;
       const newTask = await Task.create({
         title,
         description,
         status: "pending",
-        UserId: id,
+        UserId: userId,
       });
 
       res.status(201).json(newTask);
@@ -63,7 +63,7 @@ module.exports = class TaskController {
         );
 
         res.status(200).json({
-          message: "Successfully update the Task",
+          message: "Successfully update the task",
         });
       }
     } catch (error) {
@@ -76,8 +76,8 @@ module.exports = class TaskController {
 
   static async getAllUserTask(req, res) {
     try {
-      const { id } = req.user;
-      const tasks = await Task.findAll({ where: { UserId: id } });
+      const { userId } = req.user;
+      const tasks = await Task.findAll({ where: { UserId: userId } });
       if (!tasks) {
         return res.status(404).json({
           message: "Task User is Not Found",
@@ -85,6 +85,28 @@ module.exports = class TaskController {
       }
       res.status(200).json(tasks);
     } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  }
+
+  static async deleteTask(req, res) {
+    try {
+      const { id } = req.params;
+      const task = await Task.findByPk(id);
+      if (!task) {
+        return res.status(404).json({
+          message: "Task Not Found",
+        });
+      } else {
+        await Task.destroy({ where: { id } });
+        res.status(200).json({
+          message: "Successfully delete the task",
+        });
+      }
+    } catch (error) {
+      console.log(error);
       res.status(500).json({
         message: "Internal Server Error",
       });

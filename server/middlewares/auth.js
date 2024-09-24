@@ -1,5 +1,5 @@
 const { verifyToken } = require("../helpers/jwtHelper");
-const { User } = require("../models");
+const { User, Task } = require("../models");
 
 const auth = async (req, res, next) => {
   try {
@@ -28,7 +28,7 @@ const auth = async (req, res, next) => {
     }
 
     req.user = {
-      id: user.id,
+      userId: user.id,
       username: user.username,
       email: user.email,
     };
@@ -41,6 +41,33 @@ const auth = async (req, res, next) => {
   }
 };
 
+const authoriz = async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const { id } = req.params;
+
+    const task = await Task.findByPk(id);
+    if (!task) {
+      return res.status(404).json({
+        message: "Task Not Found",
+      });
+    }
+
+    if (task.UserId !== userId) {
+      return res.status(403).json({
+        message: "Forbidden",
+      });
+    }
+
+    next();
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   auth,
+  authoriz,
 };
