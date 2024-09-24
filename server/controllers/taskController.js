@@ -14,7 +14,7 @@ module.exports = class TaskController {
 
       res.status(201).json(newTask);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error.name === "SequelizeValidationError") {
         const validate = error.errors.map((er) => er.message);
         res.status(400).json({
@@ -67,10 +67,17 @@ module.exports = class TaskController {
         });
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: "Internal Server Error",
-      });
+      // console.log(error);
+      if (error.name === "SequelizeValidationError") {
+        const validate = error.errors.map((er) => er.message);
+        res.status(400).json({
+          message: validate,
+        });
+      } else {
+        res.status(500).json({
+          message: "Internal Server Error",
+        });
+      }
     }
   }
 

@@ -38,12 +38,22 @@ module.exports = class UserController {
   static async login(req, res) {
     try {
       const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({
+          message: "CredantiaslRequired",
+        });
+      }
+
       const user = await User.findOne({ where: { email } });
       if (!user) {
         return res.status(404).json({ message: "User not Found" });
       }
 
       const comparedPass = comparedPassword(password, user.password);
+      if (!comparedPass) {
+        return res.status(401).json({ message: "Invalid password" });
+      }
+
       const access_token = signInToken({
         id: user.id,
         email: user.email,
