@@ -20,21 +20,13 @@ module.exports = {
       status: {
         allowNull: false,
         type: Sequelize.STRING,
+        defaultValue: "pending"
       },
       UserId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
           key: "id",
-        },
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      },
-      CategoryId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "Categories",
-          key: "id"
         },
         onDelete: "cascade",
         onUpdate: "cascade",

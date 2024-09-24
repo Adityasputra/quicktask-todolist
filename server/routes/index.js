@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const routerUser = require("./user");
-const routerCategory = require("./category");
+const routerTask = require("./task");
 
 router.use("/api/users", routerUser);
-router.use("/api/categories", routerCategory);
+router.use("/api/tasks", routerTask);
 
 module.exports = router;
