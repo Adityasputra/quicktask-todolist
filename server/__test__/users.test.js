@@ -47,4 +47,14 @@ describe("POST /login", () => {
     expect(response.body).toBeInstanceOf(Object);
     expect(response.body).toHaveProperty("access_token", expect.any(String));
   });
+
+  // test("Failed 400 - missing email", async () => {
+  //   const response = await request(app).post("/api/users/login").send({
+  //     email: "",
+  //     password: "moom123",
+  //   });
+  //   expect(response.status).toBe(200);
+  //   expect(response.body).toBeInstanceOf(Object);
+  //   expect(response.body).toHaveProperty("message", "")
+  // });
 });
