@@ -1,6 +1,7 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import DasboardPage from "./pages/dashboard/DashboardPage";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <h1>Hello This Home</h1>,
+    element: <DasboardPage />,
     loader: () => {
       if (!localStorage.access_token) return redirect("/login");
       return null;
