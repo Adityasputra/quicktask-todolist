@@ -77,4 +77,42 @@ module.exports = class UserController {
       }
     }
   }
+
+  static async googleLogin(req, res) {
+    const token = req.headers.google_token;
+    try {
+      const client = new OAuth2Client();
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audiece: process.env.GOOGLE_CLIENT_ID,
+      });
+
+      const payload = ticket.getPayload();
+      const email = payload.email;
+
+      const [user, created] = await User.findOne({
+        where: { email },
+        default: {
+          email,
+          password: "GoogleLogin",
+        },
+        hooks: false,
+      });
+
+      if (!created) {
+        if (user.password !== "GoogleLogin") {
+          return res.status(403).json({
+            message: "Already register",
+          });
+        }
+      }
+
+      const access_token = signInToken({ id: user.id });
+      res.status(200).json({ access_token });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  }
 };
