@@ -79,22 +79,21 @@ module.exports = class UserController {
   }
 
   static async googleLogin(req, res) {
-    const token = req.headers.google_token;
     try {
+      const { google_token } = req.headers;
       const client = new OAuth2Client();
       const ticket = await client.verifyIdToken({
-        idToken: token,
-        audiece: process.env.GOOGLE_CLIENT_ID,
+        idToken: google_token,
+        audience: process.env.GOOGLE_CLIENT_ID,
       });
 
-      const payload = ticket.getPayload();
-      const email = payload.email;
+    const { email } = ticket.payload
 
-      const [user, created] = await User.findOne({
+      const [user, created] = await User.findOrCreate({
         where: { email },
-        default: {
+        defaults: {
           email,
-          password: "GoogleLogin",
+          password: Math.random() * 8,
         },
         hooks: false,
       });
@@ -102,7 +101,7 @@ module.exports = class UserController {
       if (!created) {
         if (user.password !== "GoogleLogin") {
           return res.status(403).json({
-            message: "Already register",
+            message: "Email already registered with different method",
           });
         }
       }
@@ -110,6 +109,7 @@ module.exports = class UserController {
       const access_token = signInToken({ id: user.id });
       res.status(200).json({ access_token });
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         message: "Internal Server Error",
       });
