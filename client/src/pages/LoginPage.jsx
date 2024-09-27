@@ -1,6 +1,6 @@
 import axios from "../services/apiService";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -131,12 +131,12 @@ export default function LoginPage() {
               <div className="mt-4 text-center">
                 <p className="text-sm text-gray-600">
                   Don't have an account?{" "}
-                  <a
-                    href="/register"
+                  <Link
+                    to="/register"
                     className="text-[#9b59b6] font-bold hover:underline"
                   >
                     Sign up here
-                  </a>
+                  </Link>
                 </p>
               </div>
             </form>

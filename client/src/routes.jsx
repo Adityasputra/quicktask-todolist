@@ -1,5 +1,6 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -12,7 +13,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <h1> Hello This Register</h1>,
+    element: <RegisterPage />,
     loader: () => {
       if (localStorage.access_token) return redirect("/");
       return null;
